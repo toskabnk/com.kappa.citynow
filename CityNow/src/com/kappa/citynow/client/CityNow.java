@@ -89,7 +89,9 @@ public class CityNow implements EntryPoint {
 		closeButton1.getElement().setId("closeButton");
 		VerticalPanel verticalInfoPanel1 = new VerticalPanel();
 		verticalInfoPanel1.addStyleName("verticalInfoPanel1");
-		verticalInfoPanel1.add(new HTML("<b>Hola</b>"));
+		verticalInfoPanel1.add(new HTML("<b>Con CityNow vas a poder conocer tu ciudad con imagenes,"
+				+ "<br> el tiempo y eventos proximos.<br>Ademas de poder planificar una ruta<br>por las ciudades que introduzcas.<br>"
+				+ "Todo ello, mostrado en un mapa interactivo.</b>"));
 		verticalInfoPanel1.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		verticalInfoPanel1.add(closeButton1);
 		infoBox.setWidget(verticalInfoPanel1);

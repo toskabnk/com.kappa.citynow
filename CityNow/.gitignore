@@ -1,3 +1,4 @@
 /test-classes/
 bin
 .metadata 
+/gwt-unitCache/
