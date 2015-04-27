@@ -9,6 +9,6 @@ public interface MashupService extends RemoteService {
 	WeatherSearch getTiempo(String nombreCiudad);
 	//Fotos
 	PhotoSearch getFotos(String nombreCiudad);
-	//Hola caracola
+	//Hola caracolaaa
 	
 }
