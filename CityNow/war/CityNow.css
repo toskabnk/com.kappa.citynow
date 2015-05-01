@@ -48,3 +48,14 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+legend {
+	font-size:1.4em;
+	color:#5D5D5D;
+}
+
+#eventful {
+	width:40%;
+	margin:4%;
+	float:left;
+}

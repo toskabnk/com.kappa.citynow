@@ -1,2 +1,0 @@
-serviceClass: com.kappa.citynow.client.GreetingService
-path: 3CB604E97C34790C5ABCBACF80FC60CF.gwt.rpc
