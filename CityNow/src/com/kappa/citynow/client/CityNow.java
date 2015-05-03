@@ -1,6 +1,9 @@
 package com.kappa.citynow.client;
 
+
+
 import com.kappa.citynow.shared.FieldVerifier;
+import com.kappa.citynow.shared.domain.flickr.PhotoSearch;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -193,5 +196,5 @@ public class CityNow implements EntryPoint {
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);*/
-	}
-}
+
+
