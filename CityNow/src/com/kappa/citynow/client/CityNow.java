@@ -23,7 +23,7 @@ public class CityNow implements EntryPoint {
 	
 
 	
-	/*public void onModuleLoad() {
+	public void onModuleLoad() {
 		
 		
 		//CodigoEntrega 1
