@@ -9,7 +9,10 @@ public class Thumb implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5430942305338677495L;
+	/**
+	 * 
+	 */
 	private String height;
    	private String url;
    	private String width;

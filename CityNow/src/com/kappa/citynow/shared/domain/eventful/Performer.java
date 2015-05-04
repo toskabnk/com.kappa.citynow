@@ -9,7 +9,10 @@ public class Performer implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8083534024161298782L;
+	/**
+	 * 
+	 */
 	private String creator;
    	private String id;
    	private String linker;

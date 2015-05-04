@@ -11,7 +11,10 @@ public class Events implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5154355466122298634L;
+	/**
+	 * 
+	 */
 	private List<Event> event;
 
  	public List<Event> getEvent(){

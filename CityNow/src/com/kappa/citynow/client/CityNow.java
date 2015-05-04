@@ -250,8 +250,21 @@ public class CityNow implements EntryPoint {
 		String output="<fieldset>";
 		output+= "<legend>"+city+" events</legend>";
 		if(result!=null){
+			if(result.getEvents()!=null){
 			for(Event event:result.getEvents().getEvent()){
-				output+="<img src='"+event.getImage().getUrl()+"'/>"+event.getTitle()+event.getDescription();
+				if(event.getImage()!=null){
+					output+="<img src='"+event.getImage().getUrl()+"'/>"+event.getTitle()+event.getDescription();
+				}
+				
+				else{
+					output+=event.getTitle()+event.getDescription();
+
+				}
+			}
+		}
+			
+		else{
+				output="<span> No results </span>";
 			}
 		}
 		else{

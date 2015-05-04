@@ -3,11 +3,17 @@ package com.kappa.citynow.shared.domain.eventful;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Event implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3005764160638300812L;
+	/**
+	 * 
+	 */
 	private String all_day;
    	private String calendar_count;
    	private String calendars;

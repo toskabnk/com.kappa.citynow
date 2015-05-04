@@ -9,7 +9,10 @@ public class EventSearch implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6759635525542503076L;
+	/**
+	 * 
+	 */
 	private Events events;
    	private String first_item;
    	private String last_item;

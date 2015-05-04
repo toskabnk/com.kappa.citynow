@@ -9,7 +9,10 @@ public class Image implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5951855625756872452L;
+	/**
+	 * 
+	 */
 	private String caption;
    	private String height;
    	private Medium medium;

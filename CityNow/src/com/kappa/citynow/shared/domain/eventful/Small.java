@@ -9,7 +9,10 @@ public class Small implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2372095317923784545L;
+	/**
+	 * 
+	 */
 	private String height;
    	private String url;
    	private String width;

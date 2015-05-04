@@ -9,7 +9,10 @@ public class Medium implements Serializable{
    	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6623354537605700864L;
+	/**
+	 * 
+	 */
 	private String height;
    	private String url;
    	private String width;
