@@ -6,7 +6,29 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  <servlet>
+	    <servlet-name>SystemServiceServlet</servlet-name>
+    	<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+	    <init-param>
+      	<param-name>services</param-name>
+	    <param-value/>
+    	</init-param>
+  		</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>SystemServiceServlet</servlet-name>
+    	<url-pattern>/_ah/spi/*</url-pattern>
+  		</servlet-mapping>
+  		
+   <servlet>
+    	<servlet-name>mashupServlet</servlet-name>
+    	<servlet-class>com.kappa.citynow.server.MashupServiceImpl</servlet-class>
+  </servlet>
   
+   		<servlet-mapping>
+    	<servlet-name>mashupServlet</servlet-name>
+    	<url-pattern>/citynow/mashup</url-pattern>
+ 		</servlet-mapping>
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>CityNow.html</welcome-file>

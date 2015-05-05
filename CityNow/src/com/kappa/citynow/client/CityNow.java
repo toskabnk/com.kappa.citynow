@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.TextBox;
 public class CityNow implements EntryPoint {
 
 	
-
+/*
 	
 	public void onModuleLoad() {
 		
