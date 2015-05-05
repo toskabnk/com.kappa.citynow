@@ -178,7 +178,7 @@ public class CityNow implements EntryPoint {
 	private void showFotos(String city, PhotoSearch result) {
 
 		String output="<fieldset>";
-		output += "<legend>" + city + " albums</legend>";
+		output += "<legend>" + city + "</legend>";
         if (result != null) {
         	for (Photo p: result.getPhotos().getPhoto()) {
         		output +="<img src='http://farm"+p.getFarm()+".staticflickr.com/"+p.getServer()+"/"+p.getId()+"_"+p.getSecret()+".jpg'/>";
