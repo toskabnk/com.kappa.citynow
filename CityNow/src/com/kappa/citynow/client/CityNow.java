@@ -1,21 +1,22 @@
 package com.kappa.citynow.client;
 
-import com.kappa.citynow.shared.FieldVerifier;
+
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.kappa.citynow.shared.domain.openweather.Weather;
+import com.kappa.citynow.shared.domain.openweather.WeatherSearch;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -25,6 +26,10 @@ public class CityNow implements EntryPoint {
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
 	 */
+	private  TextBox searchField = new TextBox();
+	private Label statusLabel = new Label();
+	private HorizontalPanel searchPanel = new HorizontalPanel();
+	@SuppressWarnings("unused")
 	private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
@@ -32,8 +37,8 @@ public class CityNow implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	private final MashupServiceAsync mashupService = GWT
+			.create(MashupService.class);
 
 	/**
 	 * This is the entry point method.
@@ -43,18 +48,29 @@ public class CityNow implements EntryPoint {
 		
 		//CodigoEntrega 1
 		final Button groupButton = new Button("Integrantes del Grupo");
-		final Button infoButton = new Button("Info del Trabajo");
+		final Button infoButton = new Button("Info del Trabajo"); //Creado Boton para enviar la busqueda
+		final Button searchButton = new Button("Buscar"); //Creado el cuadro de busqueda
+	
 
 		//Stylenames para los botones
 		groupButton.addStyleName("groupButton");
 		infoButton.addStyleName("infoButton");
-		
+		//searchButton.addStyleName("searchButton"); 
+		//searchField.addStyleName("searchField");
+		//statusLabel.addStyleName("statusLabel");
+		searchPanel.add(searchButton);
+		searchPanel.add(searchField);
+		searchPanel.add(statusLabel);
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel.get("groupButtonContainer").add(groupButton);
 		RootPanel.get("infoButtonContainer").add(infoButton);
-
+		//RootPanel.get("searchButton").add(searchButton); //Añadido Boton para enviar la busqueda
+		//RootPanel.get("searchField").add(searchField);  //Añadido el cuadro de busqueda
+		//RootPanel.get("statusLabel").add(statusLabel); //Añadido label de status (Opcional)
+		searchField.setText("Ciudad"); //Setear un texto predeterminado
+		RootPanel.get("form").add(searchPanel);
 
 		// Create the popup dialog box
 		final DialogBox groupBox = new DialogBox();
@@ -129,6 +145,37 @@ public class CityNow implements EntryPoint {
 			}
 		});
 		
+		searchField.setFocus(true);
+		searchField.selectAll();
+		
+		searchButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				statusLabel.setText("Nuestros monetes estan buscando...");
+				RootPanel.get("eventful").clear();
+				final String city = searchField.getText();
+				mashupService.getWeather(city, new AsyncCallback<WeatherSearch>() {
+					public void onSuccess(WeatherSearch result) {
+						showWeather(city, result);
+						statusLabel.setText("");
+
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						statusLabel.setText("Error"+caught.getMessage());
+
+					}
+				});
+			}
+		});
+		
+		
+		
+		
+		
+		
 
 /*		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -138,7 +185,6 @@ public class CityNow implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				sendNameToServer();
 			}
-
 			*//**
 			 * Fired when the user types in the nameField.
 			 *//*
@@ -147,7 +193,6 @@ public class CityNow implements EntryPoint {
 					sendNameToServer();
 				}
 			}
-
 			*//**
 			 * Send the name from the nameField to the server and wait for a response.
 			 *//*
@@ -159,7 +204,6 @@ public class CityNow implements EntryPoint {
 					errorLabel.setText("Please enter at least four characters");
 					return;
 				}
-
 				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
 				textToServerLabel.setText(textToServer);
@@ -176,7 +220,6 @@ public class CityNow implements EntryPoint {
 								dialogBox.center();
 								closeButton.setFocus(true);
 							}
-
 							public void onSuccess(String result) {
 								dialogBox.setText("Remote Procedure Call");
 								serverResponseLabel
@@ -188,10 +231,31 @@ public class CityNow implements EntryPoint {
 						});
 			}
 		}
-
 		// Add a handler to send the name to the server
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);*/
+		
+		
+		
+		
 	}
+	
+	private void showWeather(String weather, WeatherSearch result){
+		String output="<fieldset>";
+		output+= "<legend>"+weather+" weather</legend>";
+		if(result!=null){
+			for(Weather tiempo:result.getWeather()){
+				output+=tiempo.getDescription();
+			}
+		}
+		else{
+			output="<span> No results </span>";
+		}
+		output+="</fieldset>";
+		HTML eventos = new HTML(output);
+		
+		RootPanel.get("weather").add(eventos);
+	}
+	
 }
