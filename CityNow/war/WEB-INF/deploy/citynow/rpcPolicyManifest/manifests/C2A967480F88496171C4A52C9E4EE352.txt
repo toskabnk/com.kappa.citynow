@@ -1,0 +1,2 @@
+serviceClass: com.kappa.citynow.client.MashupService
+path: 231EFCB732E75451E28C82FA778B5723.gwt.rpc
