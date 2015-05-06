@@ -152,8 +152,8 @@ public class CityNow implements EntryPoint {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				statusLabel.setText("Nuestros monetes estan buscando...");
-				RootPanel.get("eventful").clear();
+				statusLabel.setText("Nuestros monetes están buscando...");
+				RootPanel.get("weather").clear();
 				final String city = searchField.getText();
 				mashupService.getWeather(city, new AsyncCallback<WeatherSearch>() {
 					public void onSuccess(WeatherSearch result) {
