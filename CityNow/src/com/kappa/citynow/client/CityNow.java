@@ -1,8 +1,12 @@
 package com.kappa.citynow.client;
 
+import aiss.client.ZoomControlOptions;
+
 import com.kappa.citynow.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -12,15 +16,29 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.maps.gwt.client.GoogleMap;
+import com.google.maps.gwt.client.LatLng;
+import com.google.maps.gwt.client.MapOptions;
+import com.google.maps.gwt.client.MapTypeControlOptions;
+import com.google.maps.gwt.client.MapTypeControlStyle;
+import com.google.maps.gwt.client.MapTypeId;
+import com.google.maps.gwt.client.ZoomControlStyle;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CityNow implements EntryPoint {
+	
+	private TextBox searchTextBoxLat= new TextBox();
+	private TextBox searchTextBoxLong= new TextBox();
+	private Button searchButton=new Button();
+	private HorizontalPanel searchPannel= new HorizontalPanel();
+	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -129,5 +147,51 @@ public class CityNow implements EntryPoint {
 			}
 		});
 		
+		
+		
+		searchPannel.add(searchButton);
+		searchPannel.add(searchTextBoxLat);
+		searchPannel.add(searchTextBoxLong);
+		
+		RootPanel.get("maps").add(searchPannel);
+		
+		searchButton.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				String lat1= searchTextBoxLat.getText();
+				Double lat=Double.parseDouble(lat1);
+				String longg1= searchTextBoxLong.getText();
+				Double longg=Double.parseDouble(longg1);
+				RootPanel.get("map_canvas").clear();
+				showMap(lat, longg);
+			}
+		});
+		
+		
 	}
+	
+	private void showMap(Double lat, Double lonng){
+		LatLng ciudad = LatLng.create(40.4404917 , -3.68981665  );
+		MapOptions myOptions = MapOptions.create();
+		myOptions.setZoom(8.0);
+		myOptions.setCenter(ciudad);
+		myOptions.setMapTypeId(MapTypeId.SATELLITE);
+		
+		
+	/*	MapTypeControlOptions myControlOptions = MapTypeControlOptions.create();
+		myControlOptions.setStyle(MapTypeControlStyle.HORIZONTAL_BAR);
+		myOptions.setMapTypeControlOptions(myControlOptions);
+		
+		myOptions.setZoomControl(true);
+		com.google.maps.gwt.client.ZoomControlOptions myZoomOptions = 	com.google.maps.gwt.client.ZoomControlOptions.create();
+		myZoomOptions.setStyle(ZoomControlStyle.LARGE);
+		myOptions.setZoomControlOptions(myZoomOptions);*/
+		
+		GoogleMap.create(Document.get().getElementById("map_canvas"), myOptions);
+		
+		
+	}
+	
+
+
 }
