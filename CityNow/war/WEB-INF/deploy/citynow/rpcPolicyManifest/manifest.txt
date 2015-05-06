@@ -1,3 +1,2 @@
 # Module citynow
 # RPC service class, partial path of RPC policy file
-com.kappa.citynow.client.GreetingService, 3CB604E97C34790C5ABCBACF80FC60CF.gwt.rpc

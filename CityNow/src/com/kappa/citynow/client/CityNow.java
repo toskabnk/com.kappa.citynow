@@ -1,197 +1,176 @@
 package com.kappa.citynow.client;
 
-import com.kappa.citynow.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.kappa.citynow.shared.domain.eventful.Event;
+import com.kappa.citynow.shared.domain.eventful.EventSearch;
+import com.kappa.citynow.shared.domain.flickr.Photo;
+import com.kappa.citynow.shared.domain.flickr.PhotoSearch;
+import com.kappa.citynow.shared.domain.openweather.Weather;
+import com.kappa.citynow.shared.domain.openweather.WeatherSearch;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class CityNow implements EntryPoint {
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+	
+	//Creamos el servicio de llamada al servidor
+	private final MashupServiceAsync mashupService = GWT
+			.create(MashupService.class);
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
-
-	/**
-	 * This is the entry point method.
-	 */
+	
+	//Panel para los botones
+	private HorizontalPanel searchPanel= new HorizontalPanel();
+	private Label statusLabel = new Label();
+	
+	//Metodo EntryPoint
 	public void onModuleLoad() {
 		
+		//Creamos los botones y el cuadro de texto
+		final Button searchButton= new Button("Search");
+		final TextBox searchBox = new TextBox();
 		
-		//CodigoEntrega 1
-		final Button groupButton = new Button("Integrantes del Grupo");
-		final Button infoButton = new Button("Info del Trabajo");
-
-		//Stylenames para los botones
-		groupButton.addStyleName("groupButton");
-		infoButton.addStyleName("infoButton");
 		
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("groupButtonContainer").add(groupButton);
-		RootPanel.get("infoButtonContainer").add(infoButton);
-
-
-		// Create the popup dialog box
-		final DialogBox groupBox = new DialogBox();
-		groupBox.setText("Informacion del grupo");
-		groupBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Cerrar");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		VerticalPanel verticalInfoPanel = new VerticalPanel();
-		verticalInfoPanel.addStyleName("verticalInfoPanel");
-		verticalInfoPanel.add(new HTML("<b>El grupo esta formado por:</b>"));
-		verticalInfoPanel.add(new HTML("<br><b>Antonio de la Rosa Santiago<br>Antonio Castroviejo Naranjo<br>Manu Perez Carmona<br>Daniel Gomez Vela</b>"));
-		verticalInfoPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		verticalInfoPanel.add(closeButton);
-		groupBox.setWidget(verticalInfoPanel);
-
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
+		
+		//Los añadimos al panel
+		searchPanel.add(searchButton);
+		searchPanel.add(searchBox);
+		searchPanel.add(statusLabel);
+		
+		//Seteamos el focus en el cuadro de texto
+		searchBox.setText("City");
+		searchBox.setFocus(true);
+		searchBox.selectAll();
+	
+		//Y lo añadimos al RootPanel
+		RootPanel.get("searchPanelContainer").add(searchPanel);
+		
+		//Añadimos un evento al clickar el boton
+		searchButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				groupBox.hide();
-				infoButton.setEnabled(true);
-				groupButton.setEnabled(true);
-				groupButton.setFocus(true);
+				statusLabel.setText("My monkeys are searching...");
+				final String city = searchBox.getText();
+				getEvents(city);
+				getWeather(city);
+				getPhotos(city);
 			}
 		});
 		
-		final DialogBox infoBox = new DialogBox();
-		infoBox.setText("Informacion del trabajo");
-		infoBox.setAnimationEnabled(true);
-		final Button closeButton1 = new Button("Cerrar");
-		// We can set the id of a widget by accessing its Element
-		closeButton1.getElement().setId("closeButton");
-		VerticalPanel verticalInfoPanel1 = new VerticalPanel();
-		verticalInfoPanel1.addStyleName("verticalInfoPanel1");
-		verticalInfoPanel1.add(new HTML("<b>Con CityNow vas a poder conocer tu ciudad con imagenes,"
-				+ "<br> el tiempo y eventos proximos.<br>Ademas de poder planificar una ruta<br>por las ciudades que introduzcas.<br>"
-				+ "Todo ello, mostrado en un mapa interactivo.</b>"));
-		verticalInfoPanel1.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		verticalInfoPanel1.add(closeButton1);
-		infoBox.setWidget(verticalInfoPanel1);
-
-		// Add a handler to close the DialogBox
-		closeButton1.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				infoBox.hide();
-				infoButton.setEnabled(true);
-				groupButton.setEnabled(true);
-				infoButton.setFocus(true);
+	}
+	
+	
+	
+	private void getEvents(String city){
+		final String cityFinal = city;
+		mashupService.getEvents(city, new AsyncCallback<EventSearch>() {
+			public void onSuccess(EventSearch result) {
+				statusLabel.setText("");
+				showEvents(cityFinal, result);
+			}
+			
+			public void onFailure(Throwable caught) {
 				
 			}
 		});
-		
-		groupButton.addClickHandler(new ClickHandler() {
+	}
+	
+	private void getWeather(String city){
+		final String cityFinal = city;
+		mashupService.getWeather(cityFinal, new AsyncCallback<WeatherSearch>() {
+			public void onSuccess(WeatherSearch result) {
+				statusLabel.setText("");
+				showWeather(cityFinal, result);
+			}
 			
-			@Override
-			public void onClick(ClickEvent event) {
-				groupBox.center();
-				closeButton.setFocus(true);
-				infoButton.setEnabled(false);
-				groupButton.setEnabled(false);
+			public void onFailure(Throwable caught) {
+				
 			}
 		});
-		
-		infoButton.addClickHandler(new ClickHandler() {
+	}
+	
+	private void getPhotos(String city){
+		final String cityFinal = city;
+		mashupService.getPhotoFlickr(cityFinal, new AsyncCallback<PhotoSearch>() {
+			public void onSuccess(PhotoSearch result) {
+				statusLabel.setText("");
+				showFotos(cityFinal, result);
+			}
 			
-			@Override
-			public void onClick(ClickEvent event) {
-				infoBox.center();
-				closeButton1.setFocus(true);
-				infoButton.setEnabled(false);
-				groupButton.setEnabled(false);
+			public void onFailure(Throwable caught) {
+				
 			}
 		});
-		
-
-/*		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			*//**
-			 * Fired when the user clicks on the sendButton.
-			 *//*
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
-
-			*//**
-			 * Fired when the user types in the nameField.
-			 *//*
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
+	}
+	
+	private void showEvents(String city, EventSearch result){
+		String output="<fieldset>";
+		output+= "<legend>"+city+" events</legend>";
+		if(result!=null){
+			if(result.getEvents()!=null){
+			for(Event event:result.getEvents().getEvent()){
+				if(event.getImage()!=null){
+					output+="<img src='"+event.getImage().getUrl()+"'/>"+event.getTitle()+event.getDescription();
 				}
-			}
+				
+				else{
+					output+=event.getTitle()+event.getDescription();
 
-			*//**
-			 * Send the name from the nameField to the server and wait for a response.
-			 *//*
-			private void sendNameToServer() {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
 				}
-
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
 			}
 		}
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);*/
+			
+		else{
+				output="<span> No results </span>";
+			}
+		}
+		else{
+			output="<span> No results </span>";
+		}
+		output+="</fieldset>";
+		HTML eventos = new HTML(output);
+		
+		RootPanel.get("eventful").add(eventos);
 	}
+	
+	private void showWeather(String weather, WeatherSearch result){
+		String output="<fieldset>";
+		output+= "<legend>"+weather+" weather</legend>";
+		if(result!=null){
+			for(Weather tiempo:result.getWeather()){
+				output+=tiempo.getDescription();
+			}
+		}
+		else{
+			output="<span> No results </span>";
+		}
+		output+="</fieldset>";
+		HTML eventos = new HTML(output);
+		
+		RootPanel.get("weather").add(eventos);
+	}
+	
+	private void showFotos(String city, PhotoSearch result) {
+
+		String output="<fieldset>";
+		output += "<legend>" + city + "</legend>";
+        if (result != null) {
+        	for (Photo p: result.getPhotos().getPhoto()) {
+        		output +="<img src='http://farm"+p.getFarm()+".staticflickr.com/"+p.getServer()+"/"+p.getId()+"_"+p.getSecret()+".jpg'/>";
+        	}
+        }else
+        	output="<span> No results </span>";
+	
+        output +="</fieldset>";
+        
+        HTML fotos = new HTML(output);
+        
+        RootPanel.get("flickr").add(fotos);
+	}
+
 }
