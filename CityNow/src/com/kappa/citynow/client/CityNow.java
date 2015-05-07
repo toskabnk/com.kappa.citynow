@@ -125,7 +125,7 @@ public class CityNow implements EntryPoint {
 		
 		groupButton.addClickHandler(new ClickHandler() {
 			
-			@Override
+			//@Override
 			public void onClick(ClickEvent event) {
 				groupBox.center();
 				closeButton.setFocus(true);
@@ -136,7 +136,7 @@ public class CityNow implements EntryPoint {
 		
 		infoButton.addClickHandler(new ClickHandler() {
 			
-			@Override
+			//@Override
 			public void onClick(ClickEvent event) {
 				infoBox.center();
 				closeButton1.setFocus(true);
@@ -150,9 +150,9 @@ public class CityNow implements EntryPoint {
 		
 		searchButton.addClickHandler(new ClickHandler() {
 			
-			@Override
+			//@Override
 			public void onClick(ClickEvent event) {
-				statusLabel.setText("Nuestros monetes están buscando...");
+				statusLabel.setText("Nuestros monetes estan buscando...");
 				RootPanel.get("weather").clear();
 				final String city = searchField.getText();
 				mashupService.getWeather(city, new AsyncCallback<WeatherSearch>() {
@@ -162,7 +162,7 @@ public class CityNow implements EntryPoint {
 
 					}
 
-					@Override
+					//@Override
 					public void onFailure(Throwable caught) {
 						statusLabel.setText("Error"+caught.getMessage());
 
