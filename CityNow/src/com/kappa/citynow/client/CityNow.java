@@ -1,6 +1,5 @@
 package com.kappa.citynow.client;
 
-import aiss.client.ZoomControlOptions;
 
 import com.kappa.citynow.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
@@ -178,20 +177,21 @@ public class CityNow implements EntryPoint {
 		myOptions.setMapTypeId(MapTypeId.SATELLITE);
 		
 		
-	/*	MapTypeControlOptions myControlOptions = MapTypeControlOptions.create();
+		/* MapTypeControlOptions myControlOptions = MapTypeControlOptions.create();
 		myControlOptions.setStyle(MapTypeControlStyle.HORIZONTAL_BAR);
 		myOptions.setMapTypeControlOptions(myControlOptions);
 		
 		myOptions.setZoomControl(true);
 		com.google.maps.gwt.client.ZoomControlOptions myZoomOptions = 	com.google.maps.gwt.client.ZoomControlOptions.create();
 		myZoomOptions.setStyle(ZoomControlStyle.LARGE);
-		myOptions.setZoomControlOptions(myZoomOptions);*/
+		myOptions.setZoomControlOptions(myZoomOptions); */
 		
 		GoogleMap.create(Document.get().getElementById("map_canvas"), myOptions);
 		
 		
+		
+		
 	}
 	
-
-
+	
 }
