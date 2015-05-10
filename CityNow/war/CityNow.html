@@ -25,6 +25,8 @@
     <!-- be added before this line.                -->
     <!--                                           -->
     <script type="text/javascript" language="javascript" src="citynow/citynow.nocache.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    
   </head>
 
   <!--                                           -->
@@ -68,8 +70,10 @@
         <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
       </tr>
     </table>
-    	<div id="weather"></div>
-      <div id="flickr"></div>
-      <div id="eventful"></div>
+    <div id="weather"></div>
+    <div id="flickr"></div>
+    <div id="eventful"></div>
+    <div id="map_canvas" style="width:100%; height:400px">map here</div>
+      
   </body>
 </html>

@@ -22,12 +22,10 @@ public class MashupServiceImpl extends RemoteServiceServlet implements
 	//APIKEYS
 	
 	private static final String EVENTFUL_API_KEY="hzN2JJ5PwTMfNfcx";
-	private static final String FLICKR_API_KEY = "93326044c7f685d74c5a7557375e350d";
-	//TODO: Cambiar la APIKEY de Flickr
-
-	
+	private static final String FLICKR_API_KEY = "bcdc7a65f776350f829e8483df32bab2";
 	
 	//Eventos
+	//TODO: Echar un vistazo a EventBrite
 	public EventSearch getEvents(String city) {
 		
 		ClientResource cr=null;
