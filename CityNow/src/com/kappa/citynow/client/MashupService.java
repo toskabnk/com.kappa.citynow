@@ -9,9 +9,11 @@ import com.kappa.citynow.shared.domain.openweather.WeatherSearch;
 @RemoteServiceRelativePath("mashup")
 public interface MashupService extends RemoteService {	
 	//EventFul
-	EventSearch getEvents(String city);
+	EventSearch getEvents(Double latidud, Double longitud);
+	//EventBrite
+	//EventBriteSearch getEventsBrite(Double latitud, Double longitud);
 	//Tiempo
-	WeatherSearch getWeather(String city);
+	WeatherSearch getWeather(Double latitud, Double longitud);
 	//Fotos
 	PhotoSearch getPhotoFlickr(String city);
 	

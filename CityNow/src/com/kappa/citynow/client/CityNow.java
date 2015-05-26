@@ -1,5 +1,7 @@
 package com.kappa.citynow.client;
 
+import java.util.Arrays;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -41,6 +43,7 @@ public class CityNow implements EntryPoint {
 	private HorizontalPanel searchPanel= new HorizontalPanel();
 	private Label statusLabel = new Label();
 	private static GoogleMap map;
+	private static Double[] latlon = {0.,0.};
 	
 	//Metodo EntryPoint
 	public void onModuleLoad() {
@@ -72,11 +75,14 @@ public class CityNow implements EntryPoint {
 				limpiarPaneles();
 				final String city = searchBox.getText();
 				//La llamada a los metodos se hace por separado, mas que nada para tener un poco de orden
-				getEvents(city);
-				getWeather(city);
-				getPhotos(city);
 				showMap();
-				showAddress(city);
+				while(showAddress(city)==false){
+					
+				};
+				getEvents(city,latlon[0],latlon[1]);
+				getWeather(city,latlon[0],latlon[1]);
+				getPhotos(city);
+				System.out.println(Arrays.toString(latlon));
 			}
 		});
 		
@@ -89,9 +95,9 @@ public class CityNow implements EntryPoint {
 	}
 	
 	//M
-	private void getEvents(String city){
-		final String cityFinal = city;
-		mashupService.getEvents(city, new AsyncCallback<EventSearch>() {
+	private void getEvents(String city,Double latitud, Double longitud){
+		final String cityFinal=city;
+		mashupService.getEvents(latitud,longitud, new AsyncCallback<EventSearch>() {
 			public void onSuccess(EventSearch result) {
 				statusLabel.setText("");
 				showEvents(cityFinal, result);
@@ -103,9 +109,9 @@ public class CityNow implements EntryPoint {
 		});
 	}
 	
-	private void getWeather(String city){
+	private void getWeather(String city,Double latitud, Double longitud){
 		final String cityFinal = city;
-		mashupService.getWeather(cityFinal, new AsyncCallback<WeatherSearch>() {
+		mashupService.getWeather(latitud,longitud, new AsyncCallback<WeatherSearch>() {
 			public void onSuccess(WeatherSearch result) {
 				statusLabel.setText("");
 				showWeather(cityFinal, result);
@@ -138,7 +144,7 @@ public class CityNow implements EntryPoint {
 			if(result.getEvents()!=null){
 			for(Event event:result.getEvents().getEvent()){
 				if(event.getImage()!=null){
-					output+="<img src='"+event.getImage().getUrl()+"'/>"+event.getTitle()+event.getDescription();
+					output+="<img src='"+event.getImage().getUrl()+"'/>"+event.getTitle()+event.getDescription()+event.getLatitude()+event.getLongitude();
 				}
 				
 				else{
@@ -220,18 +226,19 @@ public class CityNow implements EntryPoint {
 	
 	public static void showMap() {
 		/** TODO: Mostrar mapa */
-		LatLng myLtLng= LatLng.create(37.25819, -5.98637);
+		//LatLng myLtLng= LatLng.create(37.25819, -5.98637);
 		MapOptions myOptions=MapOptions.create();
 		myOptions.setZoom(8.0);
-		myOptions.setCenter(myLtLng);
+		//myOptions.setCenter(myLtLng);
 		myOptions.setMapTypeId(MapTypeId.ROADMAP);
 		map=GoogleMap.create(Document.get().getElementById("map_canvas"),myOptions);
+		
 	}
 	
-	private static void showAddress(String city) {
+	private static boolean showAddress(String city) {
 		/** TODO: Mostrar marcador en la dirección indicada por el usuario */
+		Boolean res=false;
 		Geocoder geocoder= Geocoder.create();
-		
 		GeocoderRequest request= GeocoderRequest.create();
 		request.setAddress(city);
 		geocoder.geocode(request, new Callback(){
@@ -239,11 +246,19 @@ public class CityNow implements EntryPoint {
 				if(status==GeocoderStatus.OK){
 					GeocoderResult location=results.get(0);
 					map.setCenter(location.getGeometry().getLocation());
+					System.out.println(location.getGeometry().getLocation().lat()+" este no es");
+					System.out.println(location.getGeometry().getLocation().lng()+" este no es");
+					latlon[0]=location.getGeometry().getLocation().lat();
+					latlon[1]=location.getGeometry().getLocation().lng();
 				}else{
 					Window.alert("Geocode was not succesful for the following reason: "+status);
 				}
 			}
 		});
+		res=true;
+		return res;
 	}
+	
+	
 
 }

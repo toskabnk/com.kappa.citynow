@@ -26,11 +26,11 @@ public class MashupServiceImpl extends RemoteServiceServlet implements
 	
 	//Eventos
 	//TODO: Echar un vistazo a EventBrite
-	public EventSearch getEvents(String city) {
+	public EventSearch getEvents(Double latitud, Double longitud) {
 		
 		ClientResource cr=null;
 		
-		cr = new ClientResource("http://api.eventful.com/json/events/search?&languages=spanish&app_key="+EVENTFUL_API_KEY+"&location="+city+"&date=Future");
+		cr = new ClientResource("http://api.eventful.com/json/events/search?&languages=spanish&app_key="+EVENTFUL_API_KEY+"&location="+latitud+","+longitud+"&date=Future");
 		
 		EventSearch res= cr.get(EventSearch.class);
 		
@@ -38,11 +38,11 @@ public class MashupServiceImpl extends RemoteServiceServlet implements
 	}
 
 	//Tiempo
-	public WeatherSearch getWeather(String city) {
+	public WeatherSearch getWeather(Double latitud, Double longitud) {
 		
 		ClientResource cr=null;
 		
-		cr=new ClientResource("http://api.openweathermap.org/data/2.5/weather?q="+city);
+		cr=new ClientResource("http://api.openweathermap.org/data/2.5/weather?lat="+latitud+"&lon="+longitud);
 		
 		WeatherSearch res= cr.get(WeatherSearch.class);
 		

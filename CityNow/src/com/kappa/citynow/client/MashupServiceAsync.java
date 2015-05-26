@@ -7,9 +7,11 @@ import com.kappa.citynow.shared.domain.openweather.WeatherSearch;
 
 public interface MashupServiceAsync {
 
-	void getEvents(String city, AsyncCallback<EventSearch> callback);
+	void getEvents(Double latidud, Double longitud,
+			AsyncCallback<EventSearch> callback);
 
-	void getWeather(String city, AsyncCallback<WeatherSearch> callback);
+	void getWeather(Double latitud, Double longitud,
+			AsyncCallback<WeatherSearch> callback);
 
 	void getPhotoFlickr(String city, AsyncCallback<PhotoSearch> callback);
 
