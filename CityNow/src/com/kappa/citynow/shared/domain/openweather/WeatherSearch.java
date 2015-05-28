@@ -4,6 +4,9 @@ package com.kappa.citynow.shared.domain.openweather;
 import java.io.Serializable;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class WeatherSearch implements Serializable{
    	/**
 	 * 
